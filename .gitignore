@@ -78,3 +78,7 @@ htmlcov/
 # Dependencies
 pip-log.txt
 pip-delete-this-directory.txt
+
+# Node
+/frontend/node_modules/
+/frontend/dist/
