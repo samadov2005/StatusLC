@@ -1,0 +1,80 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Ignore local env file with real secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so    
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+.venv
+venv/
+
+# Database
+db.sqlite3
+*.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.sublime-project
+.sublime-workspace
+
+# Static and media files
+/staticfiles/
+/static/
+/media/
+/uploads/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Dependencies
+pip-log.txt
+pip-delete-this-directory.txt

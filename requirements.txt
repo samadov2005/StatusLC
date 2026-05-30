@@ -1,0 +1,9 @@
+Django>=4.2,<5.0
+djangorestframework>=3.14.0
+python-telegram-bot>=20.0
+django-jazzmin>=2.6.0
+python-dotenv>=1.0.0
+gunicorn>=21.0.0
+psycopg2-binary>=2.9.0
+django-cors-headers>=4.0.0
+

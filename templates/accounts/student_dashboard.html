@@ -1,0 +1,122 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}O'quvchi paneli - StatusLC{% endblock %}
+
+{% block content %}
+<main class="page">
+  <header class="topbar">
+    <a class="brand" href="{% url 'home' %}">
+      <span class="brand-mark">SL</span>
+      <span>StatusLC</span>
+    </a>
+    <nav class="nav-actions">
+      <span class="user-chip">{{ user.get_full_name|default:user.username }}</span>
+      <a class="btn btn-secondary" href="{% url 'logout' %}">Chiqish</a>
+    </nav>
+  </header>
+
+  <section class="dashboard-layout">
+    <aside class="sidebar">
+      <h2>O'quvchi paneli</h2>
+      <p>{{ student.full_name|default:user.username }}</p>
+      <a class="btn btn-soft" href="{% url 'home' %}">Bosh sahifa</a>
+    </aside>
+
+    <div class="dashboard-main">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="message">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+
+      {% if student %}
+        <div class="stat-row">
+          <div class="stat-card">
+            <span>Guruh</span>
+            <strong>{% if student.group %}{{ student.group.name }}{% else %}-{% endif %}</strong>
+          </div>
+          <div class="stat-card">
+            <span>Status</span>
+            <strong>{{ student.get_status_display }}</strong>
+          </div>
+          <div class="stat-card">
+            <span>Jami to'lov</span>
+            <strong>{{ student.get_total_paid }} so'm</strong>
+          </div>
+        </div>
+
+        <section class="dashboard-card">
+          <div class="card-heading">
+            <h2>Shaxsiy ma'lumotlar</h2>
+          </div>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">To'liq ism</span>
+              <span class="info-value">{{ student.full_name }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Telefon</span>
+              <span class="info-value">{{ student.phone|default:"-" }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Ota-ona telefoni</span>
+              <span class="info-value">{{ student.parent_phone|default:"-" }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Dars vaqti</span>
+              <span class="info-value">
+                {% if student.group %}
+                  {{ student.group.get_day_of_week_display }} {{ student.group.start_time|time:"H:i" }}-{{ student.group.end_time|time:"H:i" }}
+                {% else %}
+                  Guruh tayinlanmagan
+                {% endif %}
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <section class="dashboard-card">
+          <div class="card-heading">
+            <h2>So'nggi to'lovlar</h2>
+          </div>
+          {% if recent_payments %}
+            <div class="list">
+              {% for p in recent_payments %}
+                <div class="list-item">
+                  <span><strong>{{ p.month|date:"F Y" }}</strong><br><span class="muted">{{ p.group|default:"Guruhsiz" }}</span></span>
+                  <span class="badge {% if p.status == 'paid' %}badge-success{% endif %}">{{ p.amount }} so'm</span>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty-state">Hali to'lov yozilmagan.</div>
+          {% endif %}
+        </section>
+
+        <section class="dashboard-card">
+          <div class="card-heading">
+            <h2>Davomat</h2>
+          </div>
+          {% if recent_attendances %}
+            <div class="list">
+              {% for a in recent_attendances %}
+                <div class="list-item">
+                  <span><strong>{{ a.date|date:"d.m.Y" }}</strong><br><span class="muted">{{ a.group.name }}</span></span>
+                  <span class="badge {% if a.status == 'absent' %}badge-danger{% else %}badge-success{% endif %}">{{ a.get_status_display }}</span>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty-state">Davomat yozilmagan.</div>
+          {% endif %}
+        </section>
+      {% else %}
+        <section class="dashboard-card">
+          <h2>Profil topilmadi</h2>
+          <p class="muted">Admin bilan bog'laning.</p>
+        </section>
+      {% endif %}
+    </div>
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}Kirish - StatusLC{% endblock %}
+{% block body_class %}auth-shell{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+  <h1>Kirish</h1>
+  <p>Platformaga o'z hisobingiz orqali kiring.</p>
+
+  {% if form.non_field_errors %}
+    <div class="alert-danger">
+      {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="id_username">Foydalanuvchi nomi</label>
+      {{ form.username }}
+      {% if form.username.errors %}
+        <div class="error-messages">
+          {% for error in form.username.errors %}{{ error }}{% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="id_password">Parol</label>
+      {{ form.password }}
+      {% if form.password.errors %}
+        <div class="error-messages">
+          {% for error in form.password.errors %}{{ error }}{% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary submit-btn">Kirish</button>
+  </form>
+
+  <div class="helper-text">
+    Hisob yo'qmi? <a href="{% url 'student-signup' %}">Ro'yxatdan o'ting</a><br>
+    <a href="{% url 'home' %}">Bosh sahifa</a>
+  </div>
+</section>
+{% endblock %}

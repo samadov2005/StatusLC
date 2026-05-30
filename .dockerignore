@@ -1,0 +1,16 @@
+.venv
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.git
+.gitignore
+.env
+db.sqlite3
+django-server.log
+django-server.err.log
+frontend/node_modules
+frontend/dist
+frontend/vite-server.log
+frontend/vite-server.err.log
+staticfiles

@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:16-alpine
+    env_file: .env
+    environment:
+      POSTGRES_DB: statuslc
+      POSTGRES_USER: statuslc
+      POSTGRES_PASSWORD: statuslc_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U statuslc -d statuslc"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn statuslc.wsgi:application --bind 0.0.0.0:8000"
+    environment:
+      DEBUG: "False"
+      DJANGO_SECRET_KEY: "change-this-secret-key"
+      ALLOWED_HOSTS: "localhost,127.0.0.1,backend"
+      CORS_ALLOWED_ORIGINS: "http://localhost:5173,http://127.0.0.1:5173"
+      CSRF_TRUSTED_ORIGINS: "http://localhost:5173,http://127.0.0.1:5173"
+      SECURE_SSL_REDIRECT: "False"
+      SESSION_COOKIE_SECURE: "False"
+      CSRF_COOKIE_SECURE: "False"
+      POSTGRES_DB: statuslc
+      POSTGRES_USER: statuslc
+      POSTGRES_PASSWORD: statuslc_password
+      POSTGRES_HOST: db
+      POSTGRES_PORT: "5432"
+      TELEGRAM_BOT_TOKEN: "change-me"
+    ports:
+      - "8001:8000"
+    volumes:
+      - staticfiles:/app/staticfiles
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    env_file: .env
+    ports:
+      - "80:80"
+    volumes:
+      - staticfiles:/staticfiles
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  staticfiles:

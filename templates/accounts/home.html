@@ -1,0 +1,69 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}StatusLC - O'quv platformasi{% endblock %}
+
+{% block content %}
+<main class="page">
+  <header class="topbar">
+    <a class="brand" href="{% url 'home' %}">
+      <span class="brand-mark">SL</span>
+      <span>StatusLC</span>
+    </a>
+    <nav class="nav-actions">
+      {% if user.is_authenticated %}
+        <span class="user-chip">{{ user.get_full_name|default:user.username }}</span>
+        <a class="btn btn-secondary" href="{% url 'logout' %}">Chiqish</a>
+      {% else %}
+        <a class="btn btn-secondary" href="{% url 'login' %}">Kirish</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Learning center platformasi</p>
+      <h1>StatusLC</h1>
+      <p class="hero-text">
+        O'quvchilar, guruhlar, to'lovlar va davomatni bitta tartibli tizimda boshqarish
+        uchun yaratilgan platforma. API tuzilmasi keyinchalik Telegram bot va alohida
+        web ilova bilan ishlashga tayyor.
+      </p>
+      <div class="hero-actions">
+        {% if user.is_authenticated %}
+          {% if profile and profile.role == 'student' %}
+            <a class="btn btn-primary" href="{% url 'student-dashboard' %}">O'quvchi paneli</a>
+          {% elif profile and profile.role == 'teacher' %}
+            <a class="btn btn-primary" href="{% url 'teacher-dashboard' %}">O'qituvchi paneli</a>
+          {% endif %}
+
+          {% if is_staff %}
+            <a class="btn btn-primary" href="/admin/">Admin panel</a>
+            <a class="btn btn-secondary" href="/api/">API</a>
+          {% endif %}
+        {% else %}
+          <a class="btn btn-primary" href="{% url 'student-signup' %}">Ro'yxatdan o'tish</a>
+          <a class="btn btn-secondary" href="{% url 'login' %}">Kirish</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <aside class="panel">
+      <h2 class="panel-title">Markaz holati</h2>
+      <div class="metric-grid">
+        <div class="metric">
+          <span>Faol o'quvchilar</span>
+          <strong>{{ stats.students }}</strong>
+        </div>
+        <div class="metric">
+          <span>Faol guruhlar</span>
+          <strong>{{ stats.groups }}</strong>
+        </div>
+        <div class="metric">
+          <span>Kutilayotgan to'lovlar</span>
+          <strong>{{ stats.payments_pending }}</strong>
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+{% endblock %}

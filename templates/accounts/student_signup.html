@@ -1,0 +1,73 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}Ro'yxatdan o'tish - StatusLC{% endblock %}
+{% block body_class %}auth-shell{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+  <h1>O'quvchi ro'yxati</h1>
+  <p>Yangi o'quvchi hisobini yaratish.</p>
+
+  {% if form.non_field_errors %}
+    <div class="alert-danger">
+      {% for error in form.non_field_errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="id_username">Foydalanuvchi nomi</label>
+      {{ form.username }}
+      {% if form.username.errors %}<div class="error-messages">{% for error in form.username.errors %}{{ error }}{% endfor %}</div>{% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="id_email">Email</label>
+      {{ form.email }}
+      {% if form.email.errors %}<div class="error-messages">{% for error in form.email.errors %}{{ error }}{% endfor %}</div>{% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="id_first_name">Ismi</label>
+      {{ form.first_name }}
+      {% if form.first_name.errors %}<div class="error-messages">{% for error in form.first_name.errors %}{{ error }}{% endfor %}</div>{% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="id_last_name">Familiyasi</label>
+      {{ form.last_name }}
+      {% if form.last_name.errors %}<div class="error-messages">{% for error in form.last_name.errors %}{{ error }}{% endfor %}</div>{% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="id_phone">Telefon</label>
+      {{ form.phone }}
+      {% if form.phone.errors %}<div class="error-messages">{% for error in form.phone.errors %}{{ error }}{% endfor %}</div>{% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="id_password1">Parol</label>
+      {{ form.password1 }}
+      {% if form.password1.errors %}<div class="error-messages">{% for error in form.password1.errors %}{{ error }}{% endfor %}</div>{% endif %}
+      {% if form.password1.help_text %}<div class="help-text">{{ form.password1.help_text|safe }}</div>{% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="id_password2">Parolni tasdiqlang</label>
+      {{ form.password2 }}
+      {% if form.password2.errors %}<div class="error-messages">{% for error in form.password2.errors %}{{ error }}{% endfor %}</div>{% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary submit-btn">Ro'yxatdan o'tish</button>
+  </form>
+
+  <div class="helper-text">
+    Hisobingiz bormi? <a href="{% url 'login' %}">Kirish</a><br>
+    <a href="{% url 'home' %}">Bosh sahifa</a>
+  </div>
+</section>
+{% endblock %}

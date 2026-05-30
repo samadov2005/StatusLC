@@ -1,0 +1,97 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}O'qituvchi paneli - StatusLC{% endblock %}
+
+{% block content %}
+<main class="page">
+  <header class="topbar">
+    <a class="brand" href="{% url 'home' %}">
+      <span class="brand-mark">SL</span>
+      <span>StatusLC</span>
+    </a>
+    <nav class="nav-actions">
+      <span class="user-chip">{{ user.get_full_name|default:user.username }}</span>
+      <a class="btn btn-secondary" href="{% url 'logout' %}">Chiqish</a>
+    </nav>
+  </header>
+
+  <section class="dashboard-layout">
+    <aside class="sidebar">
+      <h2>O'qituvchi paneli</h2>
+      <p>{{ teacher.full_name|default:user.username }}</p>
+      <a class="btn btn-soft" href="{% url 'home' %}">Bosh sahifa</a>
+    </aside>
+
+    <div class="dashboard-main">
+      <div class="stat-row">
+        <div class="stat-card">
+          <span>Guruhlar</span>
+          <strong>{{ groups|length }}</strong>
+        </div>
+        <div class="stat-card">
+          <span>O'quvchilar</span>
+          <strong>{{ student_count }}</strong>
+        </div>
+        <div class="stat-card">
+          <span>Status</span>
+          <strong>{{ teacher.get_status_display }}</strong>
+        </div>
+      </div>
+
+      <section class="dashboard-card">
+        <div class="card-heading">
+          <h2>Tayinlangan guruhlar</h2>
+          <a class="btn btn-soft" href="/api/groups/">API</a>
+        </div>
+
+        {% if groups %}
+          <div class="group-grid">
+            {% for g in groups %}
+              <article class="group-item">
+                <div class="card-heading">
+                  <h3>{{ g.name }}</h3>
+                  <span class="badge">{{ g.level }}</span>
+                </div>
+                <div class="info-grid">
+                  <div class="info-item">
+                    <span class="info-label">Vaqt</span>
+                    <span class="info-value">{{ g.get_day_of_week_display }} {{ g.start_time|time:"H:i" }}-{{ g.end_time|time:"H:i" }}</span>
+                  </div>
+                  <div class="info-item">
+                    <span class="info-label">O'quvchilar</span>
+                    <span class="info-value">{{ g.student_count }} / {{ g.max_students }}</span>
+                  </div>
+                </div>
+
+                {% if g.students.all %}
+                  <div class="student-tags">
+                    {% for s in g.students.all %}
+                      <span class="student-tag">{{ s.full_name }}</span>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <p class="muted">Bu guruhga hali o'quvchi biriktirilmagan.</p>
+                {% endif %}
+              </article>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="empty-state">Hali guruh tayinlanmagan.</div>
+        {% endif %}
+      </section>
+
+      <section class="dashboard-card">
+        <h2>Ish jarayoni</h2>
+        <p class="muted">
+          O'quvchilar, to'lovlar va davomat admin panel yoki API orqali boshqariladi.
+          Keyingi bosqichda shu API Telegram bot va web platformaga ulanadi.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-soft" href="/admin/">Admin panel</a>
+          <a class="btn btn-soft" href="/api/">API</a>
+        </div>
+      </section>
+    </div>
+  </section>
+</main>
+{% endblock %}
