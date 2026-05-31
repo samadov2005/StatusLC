@@ -1,0 +1,25 @@
+# Render service spec (example). Replace placeholders before use.
+# See https://render.com/docs/render-yaml for reference.
+services:
+  - type: web
+    name: statuslc-backend
+    repo: https://github.com/samadov2005/StatusLC
+    branch: main
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        value: "change-me"
+      - key: TELEGRAM_BOT_TOKEN
+        value: "change-me"
+      - key: DATABASE_URL
+        value: "postgres://statuslc:statuslc_password@db-render-host:5432/statuslc"
+
+  - type: postgres
+    name: statuslc-db
+    plan: free
+    settings:
+      user: statuslc
+      password: statuslc_password
+      database: statuslc

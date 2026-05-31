@@ -3,6 +3,7 @@ from django.urls import path, include
 from rest_framework.authtoken.views import obtain_auth_token
 from accounts import views as account_views
 from accounts import api_views as account_api_views
+from core import views as core_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -12,6 +13,7 @@ urlpatterns = [
     path('api/auth/token/', obtain_auth_token, name='api-token-auth'),
     path('api/auth/me/', account_api_views.OperatorMe.as_view(), name='api-token-me'),
     path('api/', include('core.urls')),
+    path('health/', core_views.health, name='health'),
     path('telegram/', include('telegram_bot.urls')),
     path('', include('accounts.urls')),
 ]

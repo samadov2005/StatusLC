@@ -361,3 +361,10 @@ def public_overview(request):
         'groups': payload_groups,
     })
 
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def health(request):
+    """Simple health endpoint for readiness checks."""
+    return Response({'status': 'ok'})
+
