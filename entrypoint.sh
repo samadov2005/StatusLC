@@ -51,9 +51,11 @@ if username and email and password:
       print('Updated superuser', username)
   except Exception as e:
     print('Failed to ensure superuser:', e)
+PYTHON
 
 echo "Collecting static files..."
 python manage.py collectstatic --noinput
 
 echo "Starting Gunicorn..."
-exec gunicorn statuslc.wsgi:application --bind 0.0.0.0:8000
+# Bind to the port provided by the environment (Render provides $PORT)
+exec gunicorn statuslc.wsgi:application --bind 0.0.0.0:${PORT:-8000}
