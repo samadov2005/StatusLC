@@ -18,5 +18,8 @@ urlpatterns = [
     path('telegram/', include('telegram_bot.urls')),
     # Serve frontend SPA built at /student/dashboard/
     path('student/dashboard/', TemplateView.as_view(template_name='student_dashboard/index.html'), name='student-dashboard'),
-    path('', include('accounts.urls')),
+    # Serve SPA at root
+    path('', TemplateView.as_view(template_name='student_dashboard/index.html'), name='home-spa'),
+    # Move Django account pages under /accounts/ to avoid clashing with SPA
+    path('accounts/', include('accounts.urls')),
 ]
