@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import TemplateView
 from rest_framework.authtoken.views import obtain_auth_token
 from accounts import views as account_views
 from accounts import api_views as account_api_views
@@ -15,5 +16,7 @@ urlpatterns = [
     path('api/', include('core.urls')),
     path('health/', core_views.health, name='health'),
     path('telegram/', include('telegram_bot.urls')),
+    # Serve frontend SPA built at /student/dashboard/
+    path('student/dashboard/', TemplateView.as_view(template_name='student_dashboard/index.html'), name='student-dashboard'),
     path('', include('accounts.urls')),
 ]
